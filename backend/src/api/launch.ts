@@ -3,8 +3,6 @@ import express from 'express';
 
 const router = express.Router();
 
-type EmojiResponse = string[];
-
 router.post('/lti/launch', (req, res) => {
     const ltiLaunchToken = req.body.id_token;
 
