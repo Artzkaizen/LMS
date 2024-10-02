@@ -10,7 +10,7 @@
         "start:dist": "node dist/src/index.js",
         "lint": "eslint --fix src test",
         "test": "jest",
-        "vercel-build": "Worked!!",
+        "vercel-build": "echo Worked!!",
         "typecheck": "tsc --noEmit"
     },
     "keywords": [],
