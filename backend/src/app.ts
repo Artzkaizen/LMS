@@ -18,6 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/', async (req, res, next) => {
+    const rd = req;
     try {
         const response = await fetch(
             'https://b-trend.digital/local/news/get-course.php?courseid=8'
