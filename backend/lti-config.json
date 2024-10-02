@@ -1,0 +1,34 @@
+{
+    "title": "Course MS",
+    "description": "Description of your tool",
+    "scopes": [
+        "https://purl.imsglobal.org/spec/lti-ags/scope/lineitem.readonly",
+        "https://purl.imsglobal.org/spec/lti-ags/scope/result.readonly",
+        "https://purl.imsglobal.org/spec/lti-nrps/scope/contextmembership.readonly"
+    ],
+    "extensions": [
+        {
+            "platform": "canvas.instructure.com",
+            "settings": {
+                "placements": [
+                    {
+                        "placement": "course_navigation",
+                        "message_type": "LtiResourceLinkRequest",
+                        "target_link_uri": "https://your-tool.com/launch",
+                        "title": "course-ms",
+                        "text": "Your Tool",
+                        "visibility": "admins",
+                        "default": "enabled"
+                    }
+                ]
+            }
+        }
+    ],
+    "public_jwk_url": "https://your-tool.com/.well-known/jwks.json",
+    "target_link_uri": "https://your-tool.com/launch",
+    "oidc_initiation_url": "https://your-tool.com/oidc",
+    "custom_fields": {
+        "user_id": "$User.id",
+        "course_id": "$Course.id"
+    }
+}
