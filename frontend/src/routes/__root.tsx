@@ -29,7 +29,7 @@ function RootComponent() {
 				</main>
 			</SidebarLayout>
 			{/* @ts-ignore */}
-			{import.meta.env.VITE_ENV === "development" && (
+			{import.meta.env.DEV && (
 				<TanStackRouterDevtools position="bottom-right" />
 			)}
 		</>
