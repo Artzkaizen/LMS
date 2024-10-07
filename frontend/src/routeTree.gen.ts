@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as MenuImport } from './routes/menu'
+import { Route as MainImport } from './routes/main'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as CourseCourseidImport } from './routes/course.$courseid'
@@ -20,6 +21,11 @@ import { Route as CourseCourseidImport } from './routes/course.$courseid'
 
 const MenuRoute = MenuImport.update({
   path: '/menu',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MainRoute = MainImport.update({
+  path: '/main',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -56,6 +62,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutImport
       parentRoute: typeof rootRoute
     }
+    '/main': {
+      id: '/main'
+      path: '/main'
+      fullPath: '/main'
+      preLoaderRoute: typeof MainImport
+      parentRoute: typeof rootRoute
+    }
     '/menu': {
       id: '/menu'
       path: '/menu'
@@ -78,6 +91,7 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/main': typeof MainRoute
   '/menu': typeof MenuRoute
   '/course/$courseid': typeof CourseCourseidRoute
 }
@@ -85,6 +99,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/main': typeof MainRoute
   '/menu': typeof MenuRoute
   '/course/$courseid': typeof CourseCourseidRoute
 }
@@ -93,22 +108,24 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/main': typeof MainRoute
   '/menu': typeof MenuRoute
   '/course/$courseid': typeof CourseCourseidRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/menu' | '/course/$courseid'
+  fullPaths: '/' | '/about' | '/main' | '/menu' | '/course/$courseid'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/menu' | '/course/$courseid'
-  id: '__root__' | '/' | '/about' | '/menu' | '/course/$courseid'
+  to: '/' | '/about' | '/main' | '/menu' | '/course/$courseid'
+  id: '__root__' | '/' | '/about' | '/main' | '/menu' | '/course/$courseid'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  MainRoute: typeof MainRoute
   MenuRoute: typeof MenuRoute
   CourseCourseidRoute: typeof CourseCourseidRoute
 }
@@ -116,6 +133,7 @@ export interface RootRouteChildren {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  MainRoute: MainRoute,
   MenuRoute: MenuRoute,
   CourseCourseidRoute: CourseCourseidRoute,
 }
@@ -134,6 +152,7 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/about",
+        "/main",
         "/menu",
         "/course/$courseid"
       ]
@@ -143,6 +162,9 @@ export const routeTree = rootRoute
     },
     "/about": {
       "filePath": "about.tsx"
+    },
+    "/main": {
+      "filePath": "main.tsx"
     },
     "/menu": {
       "filePath": "menu.tsx"

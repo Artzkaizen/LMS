@@ -17,11 +17,11 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', async (req, res, next) => {
-    const rd = req;
+app.get('/course/:id', async (req, res, next) => {
+    const { id } = req.params;
     try {
         const response = await fetch(
-            'https://b-trend.digital/local/news/get-course.php?courseid=8'
+            `https://staging.b-trend.digital/local/news/get-course.php?courseid=${id}`
         );
         if (!response.ok) throw new Error('Error');
         const data = await response.json();

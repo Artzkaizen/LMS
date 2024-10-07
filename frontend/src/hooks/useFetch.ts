@@ -1,12 +1,10 @@
-import { CourseInfo } from "@/routes/__root";
+import { CourseInfo } from "@/types/course";
 import { useQuery } from "@tanstack/react-query";
 import ky from "ky";
 
-// const apiUrl = import.meta.env.VITE_BASE_URL;
-
 export const fetch = async (courseId: string) => {
 	const response = await ky
-		.get(`${import.meta.env.VITE_BASE_URL}?${courseId}`)
+		.get(`${import.meta.env.VITE_BASE_URL}/course/${courseId}`)
 		.json<CourseInfo[]>();
 
 	return response;
@@ -14,7 +12,7 @@ export const fetch = async (courseId: string) => {
 
 const useFetch = (courseId: string) => {
 	return useQuery({
-		queryKey: ["fetch"],
+		queryKey: ["course", courseId],
 		queryFn: () => fetch(courseId),
 	});
 };

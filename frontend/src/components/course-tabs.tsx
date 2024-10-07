@@ -1,6 +1,9 @@
 import { cn, formatTime } from "@/lib/utils";
-import { type TVideoPlayer } from "@/components/video-player";
+import { type TVideoPlayer } from "@/components/video-player1";
 import { useEffect, useState } from "react";
+import useCourseStore from "@/hooks/useCourseStore";
+import { htmlToJson } from "@/lib/htmlToJson";
+import { useVideoStore } from "@/hooks/useVideoStore";
 
 const tabs = [
 	{ id: "transcript", label: "Transcript" },
@@ -17,46 +20,39 @@ export interface Cue {
 
 interface CourseTabsProps {
 	cues: Cue[];
+	courseid: string;
 	isError: boolean;
 	isPending: boolean;
-	videoPlayer: TVideoPlayer | null;
 	onTranscriptClick: (startTime: number) => void;
 }
 
 export default function CourseTabs({
 	cues,
+	courseid,
 	isError,
 	isPending,
-	videoPlayer,
 	onTranscriptClick,
 }: CourseTabsProps) {
+	const { currentTime } = useVideoStore();
 	const [activeTab, setActiveTab] = useState("transcript");
 	const [activeCueIndex, setActiveCueIndex] = useState(-1);
 
 	const updateActiveCueIndex = () => {
-		if (videoPlayer) {
-			const current = videoPlayer.currentTime();
-			const index = cues.findIndex(
-				(cue) => current >= cue.startTime && current <= cue.endTime
-			);
-			setActiveCueIndex(index!);
-		}
+		const index = cues.findIndex(
+			(cue) => currentTime >= cue.startTime && currentTime <= cue.endTime
+		);
+		setActiveCueIndex(index!);
 	};
 
 	useEffect(() => {
-		if (videoPlayer) {
-			updateActiveCueIndex();
-			videoPlayer.on("timeupdate", updateActiveCueIndex);
-		}
-
-		return () => {
-			if (videoPlayer) {
-				videoPlayer.off("timeupdate", updateActiveCueIndex);
-			}
-		};
-	}, [videoPlayer, cues]);
+		updateActiveCueIndex();
+	}, [currentTime, cues]);
 
 	if (isError) return <div>Error Fetching transcript</div>;
+	const { courses } = useCourseStore();
+	const course = courses.find((course) => course.record_id === courseid);
+	const formatted = htmlToJson(course?.tagesinhalte || "");
+
 	return (
 		<div className="w-full mx-auto">
 			<div className="border-b border-gray-200">
@@ -91,7 +87,7 @@ export default function CourseTabs({
 										key={index}
 										className={`flex cursor-pointer ${
 											activeCueIndex === index ? "bg-blue-100" : ""
-										}`} // Highlight active cue
+										}`}
 										onClick={() => onTranscriptClick(cue.startTime)}
 									>
 										<span className="w-12 flex-shrink-0 text-gray-500">
@@ -105,7 +101,16 @@ export default function CourseTabs({
 					</div>
 				)}
 				{activeTab === "notes" && (
-					<div className=" w-[50vw] h-[20vh]">Notes content goes here</div>
+					<div className=" w-[50vw] h-[20vh]">
+						<h3 className="font-medium text-lg">
+							{formatted?.p.content || ""}
+						</h3>
+						<ul className="list-disc pl-5">
+							{formatted?.ul.li.map((item, index) => (
+								<li key={index}>{item.content}</li>
+							))}
+						</ul>
+					</div>
 				)}
 				{activeTab === "downloads" && (
 					<div className="w-[50vw] h-[20vh]"> Downloads content goes here</div>
