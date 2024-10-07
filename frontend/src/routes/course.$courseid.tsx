@@ -22,9 +22,11 @@ function CourseComponent() {
 
 	return (
 		<section className="w-full h-full">
-			<Video
-				src={`https://vroom.b-trend.media/presentation/${course?.recording_id}/video/webcams.mp4`}
-			/>
+			{course?.recording_id && (
+				<Video
+					src={`https://vroom.b-trend.media/presentation/${course.recording_id}/video/webcams.webm`}
+				/>
+			)}
 			<CourseTabs
 				course={course}
 				cues={cues.data || []}
