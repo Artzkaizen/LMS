@@ -21,7 +21,7 @@ app.get('/course/:id', async (req, res, next) => {
     const { id } = req.params;
     try {
         const response = await fetch(
-            `https://staging.b-trend.digital/local/news/get-course.php?courseid=${id}`
+            `https://staging.b-trend.digital/local/news/course.php?courseid=${id}`
         );
         if (!response.ok) throw new Error('Error');
         const data = await response.json();

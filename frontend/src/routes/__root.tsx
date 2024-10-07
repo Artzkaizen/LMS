@@ -8,7 +8,7 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
-	const { data, isError, isPending } = useFetch("8");
+	const { data, isError, isPending } = useFetch("18");
 	const { setCourses, setIsPending, setIsError } = useCourseStore();
 
 	useEffect(() => {

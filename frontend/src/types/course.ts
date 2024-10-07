@@ -5,4 +5,5 @@ export interface CourseInfo {
 	tagesinhalte: string;
 	tafelbild: string;
 	präsentation: string | null;
+	recording_id: string | null;
 }

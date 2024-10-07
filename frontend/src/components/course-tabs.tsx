@@ -1,7 +1,6 @@
+import { CourseInfo } from "@/types/course";
 import { cn, formatTime } from "@/lib/utils";
-import { type TVideoPlayer } from "@/components/video-player1";
 import { useEffect, useState } from "react";
-import useCourseStore from "@/hooks/useCourseStore";
 import { htmlToJson } from "@/lib/htmlToJson";
 import { useVideoStore } from "@/hooks/useVideoStore";
 
@@ -20,18 +19,16 @@ export interface Cue {
 
 interface CourseTabsProps {
 	cues: Cue[];
-	courseid: string;
+	course: CourseInfo | undefined;
 	isError: boolean;
 	isPending: boolean;
-	onTranscriptClick: (startTime: number) => void;
 }
 
 export default function CourseTabs({
 	cues,
-	courseid,
+	course,
 	isError,
 	isPending,
-	onTranscriptClick,
 }: CourseTabsProps) {
 	const { currentTime } = useVideoStore();
 	const [activeTab, setActiveTab] = useState("transcript");
@@ -49,8 +46,7 @@ export default function CourseTabs({
 	}, [currentTime, cues]);
 
 	if (isError) return <div>Error Fetching transcript</div>;
-	const { courses } = useCourseStore();
-	const course = courses.find((course) => course.record_id === courseid);
+
 	const formatted = htmlToJson(course?.tagesinhalte || "");
 
 	return (
@@ -88,7 +84,7 @@ export default function CourseTabs({
 										className={`flex cursor-pointer ${
 											activeCueIndex === index ? "bg-blue-100" : ""
 										}`}
-										onClick={() => onTranscriptClick(cue.startTime)}
+										// onClick={() => onTranscriptClick(cue.startTime)}
 									>
 										<span className="w-12 flex-shrink-0 text-gray-500">
 											{formatTime(cue.startTime)}

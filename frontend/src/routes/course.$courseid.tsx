@@ -1,11 +1,8 @@
-// CourseComponent.js
-
 import CourseTabs from "@/components/course-tabs";
-import VideoPlayer, { type TVideoPlayer } from "@/components/video-player1";
 import Video from "@/components/video-player";
+import useCourseStore from "@/hooks/useCourseStore";
 import useFetchCues from "@/hooks/useFetchCues";
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 export const Route = createFileRoute("/course/$courseid")({
 	component: () => <CourseComponent />,
@@ -14,39 +11,25 @@ export const Route = createFileRoute("/course/$courseid")({
 function CourseComponent() {
 	const { courseid } = Route.useParams();
 	// const { data, error, isPending } = useFetchCourseDetails(parseInt(courseid));
+	const { courses } = useCourseStore();
 	const cues = useFetchCues("/video.vtt", courseid);
-	const [videoPlayer, setVideoPlayer] = useState<TVideoPlayer | null>(null);
 
-	const handlePlayerReady = (player: TVideoPlayer) => {
-		setVideoPlayer(player);
-	};
+	const course = courses.find(
+		(course) => course.record_id === courseid.split("-")[0]
+	);
 
-	const handleTranscriptClick = (startTime: number) => {
-		if (videoPlayer) {
-			videoPlayer.currentTime(startTime);
-			videoPlayer.play();
-		}
-	};
+	console.log(course?.recording_id);
 
 	return (
 		<section className="w-full h-full">
-			<div>
-				{/* <VideoPlayer
-					src="https://vroom.b-trend.media/presentation/0f4b940570be40500a8292009543612cbddd1220-1712208348558/video/webcams.mp4"
-					onReady={handlePlayerReady}
-				/> */}
-				{/* <Video
-					className="w"
-					src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-				></Video> */}
-				<Video src="https://vroom.b-trend.media/presentation/0f4b940570be40500a8292009543612cbddd1220-1712208348558/video/webcams.mp4" />
-			</div>
+			<Video
+				src={`https://vroom.b-trend.media/presentation/${course?.recording_id}/video/webcams.mp4`}
+			/>
 			<CourseTabs
-				courseid={courseid.split("-")[0]}
+				course={course}
 				cues={cues.data || []}
 				isError={cues.isError}
 				isPending={cues.isPending}
-				onTranscriptClick={handleTranscriptClick}
 			/>
 		</section>
 	);
